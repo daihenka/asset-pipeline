@@ -1,0 +1,11 @@
+{
+  "name": "com.daihenka.assetpipeline",
+  "displayName": "Asset Pipeline",
+  "description": "Asset Import Pipeline Tools",
+  "version": "0.5.0",
+  "unity": "2019.3",
+  "author": {
+    "name": "Daihenka",
+    "email": "daihenka@gmail.com"
+  }
+}

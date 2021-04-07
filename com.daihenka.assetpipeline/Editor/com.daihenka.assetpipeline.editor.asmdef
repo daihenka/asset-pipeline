@@ -1,0 +1,17 @@
+{
+    "name": "com.daihenka.assetpipeline.editor",
+    "references": [
+        "GUID:c5af582b9939f4e4292be3495c687a04"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
