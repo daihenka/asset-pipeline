@@ -84,6 +84,10 @@ namespace Daihenka.AssetPipeline.Import
         {
         }
 
+        public virtual void OnDeletedAsset (string assetPath)
+        {
+        }
+
         public virtual void OnMovedAsset(Object asset, string sourcePath, string destinationPath)
         {
         }
@@ -337,5 +341,6 @@ namespace Daihenka.AssetPipeline.Import
                 }
             }
         }
+
     }
 }

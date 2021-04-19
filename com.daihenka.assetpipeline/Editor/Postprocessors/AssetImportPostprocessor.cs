@@ -258,6 +258,12 @@ namespace Daihenka.AssetPipeline
                 AssetProcessor.SetForceApply(assetPath, false);
             }
 
+            foreach (var assetPath in deletedAssets) {
+                foreach (var processor in GetProcessors(assetPath, "OnDeletedAsset")) {
+                    processor.OnDeletedAsset(assetPath);
+                }
+            }
+
             for (var i = 0; i < movedAssets.Length; i++)
             {
                 foreach (var processor in GetProcessors(movedAssets[i], "OnMovedAsset"))
