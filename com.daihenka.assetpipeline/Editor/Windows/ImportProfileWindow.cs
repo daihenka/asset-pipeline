@@ -410,7 +410,13 @@ namespace Daihenka.AssetPipeline
         void OnAddAssetProcessorButtonClicked(AssetFilter assetFilter)
         {
             var menu = new GenericMenu();
-            var assetProcessorClasses = typeof(AssetProcessor).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(AssetProcessor)) && assetFilter.assetProcessors.All(x => x.GetType() != t));
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            var assetProcessorClasses = new List<Type>();
+            foreach (var assembly in assemblies) {
+                assetProcessorClasses.AddRange(assembly.GetTypes().Where(t =>
+                    t.IsSubclassOf(typeof(AssetProcessor)) && assetFilter.assetProcessors.All(x => x.GetType() != t)));
+            }
+
             foreach (var processorClass in assetProcessorClasses.Where(x => x.IsValidAssetType(assetFilter.assetType)))
             {
                 menu.AddItem(new GUIContent(processorClass.GetProcessorName(true)), false, OnAddAssetProcessorItemClicked, new AddAssetProcessorData(assetFilter, processorClass));
