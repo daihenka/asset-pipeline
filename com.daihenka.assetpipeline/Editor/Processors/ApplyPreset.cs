@@ -39,14 +39,19 @@ namespace Daihenka.AssetPipeline.Processors
                 return;
             }
 
-            var isTextureImporter = importer as TextureImporter != null;
-            if (isTextureImporter)
+
+            var textureImporter = (TextureImporter)importer;
+            if (textureImporter != null)
             {
                 var obj = new SerializedObject(importer);
 
                 var widthProp = obj.FindProperty("m_Output.sourceTextureInformation.width");
                 var heightProp = obj.FindProperty("m_Output.sourceTextureInformation.height");
 
+                var prevSpriteBorder = textureImporter.spriteBorder;
+                var prevTextureType = textureImporter.textureType;
+                var prevSpriteImportMode = textureImporter.spriteImportMode;
+                var prevSpritesheet = textureImporter.spritesheet;
                 var prevW = widthProp.intValue;
                 var prevH = heightProp.intValue;
 
@@ -55,6 +60,18 @@ namespace Daihenka.AssetPipeline.Processors
                 obj.Update();
                 widthProp.intValue = prevW;
                 heightProp.intValue = prevH;
+
+                if (prevTextureType == TextureImporterType.Sprite && textureImporter.textureType == TextureImporterType.Sprite) {
+                    if (textureImporter.spriteBorder == Vector4.zero && prevSpriteBorder != Vector4.zero) {
+                        textureImporter.spriteBorder = prevSpriteBorder;
+                    }
+                    if (textureImporter.spriteImportMode != prevSpriteImportMode) {
+                        textureImporter.spriteImportMode = prevSpriteImportMode;
+                    }
+                    if (textureImporter.spriteImportMode == SpriteImportMode.Multiple) {
+                        textureImporter.spritesheet = prevSpritesheet;
+                    }
+                }
 
                 obj.ApplyModifiedProperties();
             }
