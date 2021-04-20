@@ -13,6 +13,10 @@ namespace Daihenka.AssetPipeline
                 return AssetDatabase.GetAssetPath(targetFolder);
             }
 
+            if (pathType == MaterialPathType.Absolute) {
+                return destination.FixPathSeparators();
+            }
+
             var destinationPath = File.Exists(source) ? Path.GetDirectoryName(source) : source;
             if (pathType == MaterialPathType.Relative)
             {
@@ -31,6 +35,10 @@ namespace Daihenka.AssetPipeline
             if (pathType == TargetPathType.TargetFolder && targetFolder)
             {
                 return AssetDatabase.GetAssetPath(targetFolder);
+            }
+
+            if (pathType == TargetPathType.Absolute) {
+                return destination.FixPathSeparators();
             }
 
             var destinationPath = File.Exists(source) ? Path.GetDirectoryName(source) : source;
