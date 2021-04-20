@@ -130,10 +130,11 @@ namespace Daihenka.AssetPipeline
 
             if (GUILayout.Button("Apply All Missing Processors", EditorStyles.toolbarButton))
             {
-                var rows = m_TreeView.GetRows().Cast<ImportProfileAssetTableItem>().Where(x => x != null && x.isAsset && x.missingProcessors.Count > 0).ToArray();
+                var rows = m_TreeView.GetRows().Where(x => x is ImportProfileAssetTableItem).Cast<ImportProfileAssetTableItem>().Where(x => x.isAsset && x.missingProcessors.Count > 0).ToArray();
                 var progressMultiplier = 1f / rows.Length;
                 var strRowCount = rows.Length.ToString();
                 var assetsProcessed = 0;
+                AssetDatabase.StartAssetEditing();
                 for (var i = 0; i < rows.Length; i++)
                 {
                     var row = rows[i];
@@ -153,6 +154,7 @@ namespace Daihenka.AssetPipeline
 
                     assetsProcessed++;
                 }
+                AssetDatabase.StopAssetEditing();
 
                 EditorUtility.ClearProgressBar();
                 EditorUtility.DisplayDialog("Asset Import Pipeline", $"Finished apply processors to {assetsProcessed} assets", "Okay");
@@ -160,15 +162,6 @@ namespace Daihenka.AssetPipeline
             }
 
             GUI.enabled = true;
-
-            if (GUILayout.Button("Test", EditorStyles.toolbarButton))
-            {
-                Debug.Log(position);
-                for (int i = 0; i < 3; i++)
-                {
-                    Debug.Log(m_TreeView.multiColumnHeader.GetColumnRect(i));
-                }
-            }
 
             GUILayout.FlexibleSpace();
             m_TreeView.searchString = m_SearchField.OnToolbarGUI(m_TreeView.searchString);

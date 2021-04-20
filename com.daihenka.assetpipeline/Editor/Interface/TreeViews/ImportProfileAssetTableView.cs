@@ -72,6 +72,7 @@ namespace Daihenka.AssetPipeline
 
             var progressBarFormat = isForce ? "Force applying processors on assets: {0}/{1}" : "Applying missing processors on assets: {0}/{1}";
 
+            AssetDatabase.StartAssetEditing();
             for (var i = 0; i < items.Length; i++)
             {
                 var item = items[i];
@@ -91,6 +92,7 @@ namespace Daihenka.AssetPipeline
 
                 assetsProcessed++;
             }
+            AssetDatabase.StopAssetEditing();
 
             EditorUtility.ClearProgressBar();
             EditorUtility.DisplayDialog("Asset Import Pipeline", $"Finished apply processors to {assetsProcessed} assets", "Okay");
