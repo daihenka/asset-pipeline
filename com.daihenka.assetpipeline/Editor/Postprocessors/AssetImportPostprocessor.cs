@@ -31,10 +31,11 @@ namespace Daihenka.AssetPipeline
                 }
             }
 
+            var isOnDeletedAsset = methodNames.Length == 1 && methodNames[0] == "OnDeletedAsset";
             var result = new List<AssetProcessor>(s_CachedProcessors[assetPath].Count);
             foreach (var processor in s_CachedProcessors[assetPath])
             {
-                if (AssetProcessor.IsForceApply(assetPath) || !ImportProfileUserData.HasProcessor(assetPath, processor) && processor.HasOverriddenMethods(methodNames))
+                if (AssetProcessor.IsForceApply(assetPath) || ((isOnDeletedAsset || !ImportProfileUserData.HasProcessor(assetPath, processor)) && processor.HasOverriddenMethods(methodNames)))
                 {
                     result.Add(processor);
                 }
