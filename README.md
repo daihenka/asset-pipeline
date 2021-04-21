@@ -1,4 +1,5 @@
 # Asset Import Pipeline for Unity
+[![openupm](https://img.shields.io/npm/v/com.daihenka.assetpipeline?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.daihenka.assetpipeline/)
 
 This tool is a rule-based approach to asset postprocessors within Unity. 
 The goal is develop re-usable processors that can be applied to assets when they are imported.
@@ -86,12 +87,15 @@ public class SetAssetLabels : AssetProcessor
 
 ## How to Use
 Open the `Import Profiles` window via the `Tools > Asset Pipeline > Import Profiles` menu item.
+
 ![image](https://user-images.githubusercontent.com/6211561/115570406-5fd1c100-a2be-11eb-8046-63deaf70f3f3.png)
 
 ![image](https://user-images.githubusercontent.com/6211561/115570335-521c3b80-a2be-11eb-83a6-486bdb908c7a.png)
+
 From here you can create Import Profiles via the `Create New` button.
 
 Once you have created an import profile, double click on the item to open the editor for it.
+
 ![image](https://user-images.githubusercontent.com/6211561/115570637-91e32300-a2be-11eb-8b4d-352a371cd4a0.png)
 
 Here you can specify the Base Folder and setup any Asset Filters and Processors.
