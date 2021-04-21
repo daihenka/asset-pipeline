@@ -39,8 +39,7 @@ namespace Daihenka.AssetPipeline.Processors
                 return;
             }
 
-
-            var textureImporter = (TextureImporter)importer;
+            var textureImporter = importer as TextureImporter;
             if (textureImporter != null)
             {
                 var obj = new SerializedObject(importer);
@@ -90,7 +89,6 @@ namespace Daihenka.AssetPipeline.Processors
             {
                 return new Preset(new SpriteAtlas());
             }
-
 
             var dummyAsset = AssetDatabaseUtility.FindAssetPaths($"__importer{importAssetType.ToString().ToLowerInvariant()}dummy__").FirstOrDefault();
             var defaultImporter = AssetImporter.GetAtPath(dummyAsset);
