@@ -13,6 +13,7 @@ namespace Daihenka.AssetPipeline.Processors
         [SerializeField] MaterialPathType pathType;
         [SerializeField] string destination;
         [SerializeField] DefaultAsset targetFolder;
+        [SerializeField] FileExistsAction fileExistsAction;
 
         public override void OnPostprocess(Object asset, string assetPath)
         {
@@ -24,7 +25,18 @@ namespace Daihenka.AssetPipeline.Processors
             foreach (var material in materials)
             {
                 var materialPath = Path.Combine(destinationPath, $"{material.name}.mat");
-                materialPath = AssetDatabase.GenerateUniqueAssetPath(materialPath);
+                if (File.Exists(materialPath))
+                {
+                    if (fileExistsAction == FileExistsAction.Skip) { continue; }
+                    if (fileExistsAction == FileExistsAction.UniquePath)
+                    {
+                        materialPath = AssetDatabase.GenerateUniqueAssetPath(materialPath);
+                    }
+                    else
+                    {
+                        File.Delete(materialPath);
+                    }
+                }
 
                 var error = AssetDatabase.ExtractAsset(material, materialPath);
                 if (string.IsNullOrEmpty(error))

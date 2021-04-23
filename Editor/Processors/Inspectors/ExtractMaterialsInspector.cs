@@ -1,5 +1,6 @@
 ﻿using Daihenka.AssetPipeline.Import;
 using UnityEditor;
+using UnityEngine;
 
 namespace Daihenka.AssetPipeline.Processors
 {
@@ -9,12 +10,14 @@ namespace Daihenka.AssetPipeline.Processors
         SerializedProperty m_PathType;
         SerializedProperty m_Destination;
         SerializedProperty m_TargetFolder;
+        SerializedProperty m_FileExistsAction;
 
         protected override void OnEnable()
         {
             m_PathType = serializedObject.FindProperty("pathType");
             m_Destination = serializedObject.FindProperty("destination");
             m_TargetFolder = serializedObject.FindProperty("targetFolder");
+            m_FileExistsAction = serializedObject.FindProperty("fileExistsAction");
             base.OnEnable();
         }
 
@@ -33,6 +36,8 @@ namespace Daihenka.AssetPipeline.Processors
             {
                 EditorGUILayout.PropertyField(m_TargetFolder, DaiGUIContent.destination);
             }
+
+            EditorGUILayout.PropertyField(m_FileExistsAction, new GUIContent("Material Exists Action"));
 
             serializedObject.ApplyModifiedProperties();
         }
