@@ -233,7 +233,7 @@ namespace Daihenka.AssetPipeline.Import
         {
             if (AssetDatabase.TryGetGUIDAndLocalFileIdentifier(processor, out var guid, out long fileId))
             {
-                return m_ImporterProfileUserData.HasProcessor(guid, fileId, processor.Version);
+                return m_ImporterProfileUserData != null && m_ImporterProfileUserData.HasProcessor(guid, fileId, processor.Version);
             }
 
             // Should not hit this
