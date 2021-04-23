@@ -80,7 +80,7 @@ namespace Daihenka.AssetPipeline
 
         protected override bool CanMultiSelect(TreeViewItem item)
         {
-            return false;
+            return assetsFilter == Filter.Unused;
         }
 
         protected override void ContextClickedItem(int id)
