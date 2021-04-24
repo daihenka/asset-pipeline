@@ -321,6 +321,8 @@ namespace Daihenka.AssetPipeline.Import
             variables.Add("assetFolderName", dirInfo.Name);
             var parentDirInfo = dirInfo.Parent;
             variables.Add("assetParentFolderName", parentDirInfo == null ? dirInfo.Name : parentDirInfo.Name);
+            var parentParentDirInfo = parentDirInfo?.Parent;
+            variables.Add("assetParentParentFolderName", parentParentDirInfo == null ? dirInfo.Name : parentParentDirInfo.Name);
 
             AddTemplateVariables(variables, parent.parent.path.Parse(assetPath));
             AddTemplateVariables(variables, parent.file.Parse(Path.GetFileNameWithoutExtension(assetPath)));

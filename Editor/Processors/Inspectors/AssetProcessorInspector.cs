@@ -48,7 +48,7 @@ namespace Daihenka.AssetPipeline.Import
                 filterVariables = new List<string>();
             }
 
-            var message = "The following tokens can be used:\n{assetFilename}\t\tAsset Filename\n{assetFileExtension}\tAsset File Extension\n{assetFolderName}\t\tAsset Folder Name\n{assetParentFolderName}\tAsset Parent Folder Name";
+            var message = "The following tokens can be used:\n{assetFilename}\t\t\tAsset Filename\n{assetFileExtension}\t\tAsset File Extension\n{assetFolderName}\t\t\tAsset Folder Name\n{assetParentFolderName}\t\tAsset Parent Folder Name\n{assetParentParentFolderName}\tAsset Parent Parent Folder Name";
             foreach (var variable in profileVariables)
             {
                 message += $"\n{{{variable}}}";
