@@ -7,6 +7,7 @@ namespace Daihenka.AssetPipeline.Processors
     [CustomEditor(typeof(AddToSpriteAtlas))]
     internal class AddToSpriteAtlasInspector : AssetProcessorInspector
     {
+        SerializedProperty m_AddFolderToSpriteAtlas;
         SerializedProperty m_PathType;
         SerializedProperty m_Destination;
         SerializedProperty m_TargetFolder;
@@ -19,6 +20,7 @@ namespace Daihenka.AssetPipeline.Processors
 
         protected override void OnEnable()
         {
+            m_AddFolderToSpriteAtlas = serializedObject.FindProperty("addFolderToSpriteAtlas");
             m_PathType = serializedObject.FindProperty("pathType");
             m_Destination = serializedObject.FindProperty("destination");
             m_TargetFolder = serializedObject.FindProperty("targetFolder");
@@ -36,6 +38,9 @@ namespace Daihenka.AssetPipeline.Processors
             serializedObject.Update();
 
             DrawBaseProperties();
+            EditorGUILayout.PropertyField(m_AddFolderToSpriteAtlas);
+
+            EditorGUILayout.Space();
             EditorGUILayout.LabelField("SpriteAtlas Creation Settings (If SpriteAtlas Missing)", DaiGUIStyles.boldLabel);
 
             EditorGUILayout.Space();

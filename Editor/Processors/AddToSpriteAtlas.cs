@@ -11,6 +11,7 @@ namespace Daihenka.AssetPipeline.Processors
     [AssetProcessorDescription(typeof(SpriteAtlas), ImportAssetTypeFlag.Textures)]
     public class AddToSpriteAtlas : AssetProcessor
     {
+        [SerializeField] bool addFolderToSpriteAtlas;
         [SerializeField] TargetPathType pathType;
         [SerializeField] string destination;
         [SerializeField] DefaultAsset targetFolder;
@@ -24,6 +25,7 @@ namespace Daihenka.AssetPipeline.Processors
         public override void OnPostprocess(Object asset, string assetPath)
         {
             var assetFolder = GetDestinationPath(assetPath);
+            var assetFolderAsset = AssetDatabase.LoadAssetAtPath<DefaultAsset>(assetFolder);
             var spriteAtlas = GetExistingMasterSpriteAtlas(assetFolder);
 
             if (spriteAtlas == null)
@@ -35,17 +37,21 @@ namespace Daihenka.AssetPipeline.Processors
                     CreateVariantSpriteAtlas(spriteAtlas, assetFolder, atlasName);
                 }
             }
-            else if (spriteAtlas.GetPackables().Contains(asset))
+            else
             {
-                ImportProfileUserData.AddOrUpdateProcessor(assetPath, this);
-                return;
+                var packables = spriteAtlas.GetPackables();
+                if ((addFolderToSpriteAtlas && packables.Contains(assetFolderAsset)) || (!addFolderToSpriteAtlas && packables.Contains(asset)))
+                {
+                    ImportProfileUserData.AddOrUpdateProcessor(assetPath, this);
+                    return;
+                }
             }
 
-            spriteAtlas.Add(new[] {asset});
+            spriteAtlas.Add(new[] {addFolderToSpriteAtlas ? assetFolderAsset : asset});
             EditorUtility.SetDirty(spriteAtlas);
             AssetDatabase.SaveAssets();
             ImportProfileUserData.AddOrUpdateProcessor(assetPath, this);
-            Debug.Log($"[{GetName()}] Added \"<b>{assetPath}</b>\" to sprite atlas: \"<b>{AssetDatabase.GetAssetPath(spriteAtlas)}</b>\"");
+            Debug.Log($"[{GetName()}] Added \"<b>{(addFolderToSpriteAtlas ? assetFolder : assetPath)}</b>\" to sprite atlas: \"<b>{AssetDatabase.GetAssetPath(spriteAtlas)}</b>\"");
         }
 
         string GetDestinationPath(string assetPath)
