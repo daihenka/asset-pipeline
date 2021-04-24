@@ -27,7 +27,7 @@ namespace Daihenka.AssetPipeline.Import
 
         public static ImportProfileUserData Get(string assetPath)
         {
-            for (var i = 0; i < s_Cache.Count; i++)
+            for (var i = s_Cache.Count - 1; i >= 0; i--)
             {
                 if (s_Cache[i].m_Importer != null)
                 {
@@ -38,7 +38,7 @@ namespace Daihenka.AssetPipeline.Import
                 }
                 else
                 {
-                    Debug.LogError("AssetImporter is null for Asset - this should not happen!");
+                    s_Cache.RemoveAt(i); // File was likely moved
                 }
             }
 
