@@ -19,8 +19,28 @@ namespace Daihenka.AssetPipeline.PropertyDrawers
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            var propCount = property.FindPropertyRelative("propertyMappings").arraySize;
-            return singleLineHeight * (4 + propCount) + 36 + propCount * 2;
+            var propHeights = 0f;
+            var propMappings = property.FindPropertyRelative("propertyMappings");
+            for (var i = 0; i < propMappings.arraySize; i++) {
+                var shaderProperty = propMappings.GetArrayElementAtIndex(i);
+                if (IsShaderPropertyType(shaderProperty, ShaderUtil.ShaderPropertyType.TexEnv)) {
+                    propHeights += EditorGUI.GetPropertyHeight(shaderProperty.FindPropertyRelative("textureNameFilter"), GetShaderPropertyName(shaderProperty));
+                }
+                else if (IsShaderPropertyType(shaderProperty, ShaderUtil.ShaderPropertyType.Color)) {
+                    propHeights += EditorGUI.GetPropertyHeight(shaderProperty.FindPropertyRelative("colorValue"), GetShaderPropertyName(shaderProperty));
+                }
+                else if (IsShaderPropertyType(shaderProperty, ShaderUtil.ShaderPropertyType.Vector)) {
+                    propHeights += EditorGUI.GetPropertyHeight(shaderProperty.FindPropertyRelative("vectorValue"), GetShaderPropertyName(shaderProperty));
+                }
+                else if (IsShaderPropertyType(shaderProperty, ShaderUtil.ShaderPropertyType.Float)) {
+                    propHeights += EditorGUI.GetPropertyHeight(shaderProperty.FindPropertyRelative("floatValue"), GetShaderPropertyName(shaderProperty));
+                }
+                else if (IsShaderPropertyType(shaderProperty, ShaderUtil.ShaderPropertyType.Range)) {
+                    propHeights += EditorGUI.GetPropertyHeight(shaderProperty.FindPropertyRelative("floatValue"), GetShaderPropertyName(shaderProperty));
+                }
+            }
+
+            return singleLineHeight * 4 + propHeights + 36 + propMappings.arraySize * 2;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -50,18 +70,18 @@ namespace Daihenka.AssetPipeline.PropertyDrawers
                 for (var i = 0; i < propMappings.arraySize; i++)
                 {
                     var propMap = propMappings.GetArrayElementAtIndex(i);
-                    DrawShaderProperty(rect, propMap);
-
-                    rect.y += singleLineHeight + 2;
+                    rect.y += DrawShaderProperty(rect, propMap) + 2;
                 }
             }
         }
 
-        static void DrawShaderProperty(Rect rect, SerializedProperty property)
+        static float DrawShaderProperty(Rect rect, SerializedProperty property)
         {
+            var height = 0f;
             if (IsShaderPropertyType(property, ShaderUtil.ShaderPropertyType.TexEnv))
             {
                 var isSet = !string.IsNullOrEmpty(property.FindPropertyRelative("textureNameFilter").FindPropertyRelative("pattern").stringValue);
+                height = EditorGUI.GetPropertyHeight(property.FindPropertyRelative("textureNameFilter"), GetShaderPropertyName(property));
                 EditorGUI.PropertyField(rect, property.FindPropertyRelative("textureNameFilter"), GetShaderPropertyName(property));
                 EditorGUI.DrawRect(new Rect(rect.x - 14, rect.y, 4, rect.height), AssetPipelineSettings.GetStatusColor(isSet));
                 DrawTexture(rect, AssetImportPipeline.AssetTypeIcons[ImportAssetType.Textures]);
@@ -69,18 +89,22 @@ namespace Daihenka.AssetPipeline.PropertyDrawers
             }
             else if (IsShaderPropertyType(property, ShaderUtil.ShaderPropertyType.Color))
             {
+                height = EditorGUI.GetPropertyHeight(property.FindPropertyRelative("colorValue"), GetShaderPropertyName(property));
                 EditorGUI.PropertyField(rect, property.FindPropertyRelative("colorValue"), GetShaderPropertyName(property));
                 DrawHiddenTexture(rect, property);
             }
             else if (IsShaderPropertyType(property, ShaderUtil.ShaderPropertyType.Vector))
             {
+                height = EditorGUI.GetPropertyHeight(property.FindPropertyRelative("vectorValue"), GetShaderPropertyName(property));
                 var vectorProp = property.FindPropertyRelative("vectorValue");
                 vectorProp.vector4Value = EditorGUI.Vector4Field(rect, GetShaderPropertyName(property), vectorProp.vector4Value);
                 DrawHiddenTexture(rect, property);
+
             }
             else if (IsShaderPropertyType(property, ShaderUtil.ShaderPropertyType.Float))
             {
                 var propName = property.FindPropertyRelative("materialPropertyName").stringValue;
+                height = EditorGUI.GetPropertyHeight(property.FindPropertyRelative("floatValue"), GetShaderPropertyName(property));
                 var floatProp = property.FindPropertyRelative("floatValue");
                 var propLabel = GetShaderPropertyName(property);
                 switch (propName)
@@ -108,9 +132,12 @@ namespace Daihenka.AssetPipeline.PropertyDrawers
             }
             else if (IsShaderPropertyType(property, ShaderUtil.ShaderPropertyType.Range))
             {
+                height = EditorGUI.GetPropertyHeight(property.FindPropertyRelative("floatValue"), GetShaderPropertyName(property));
                 EditorGUI.Slider(rect, property.FindPropertyRelative("floatValue"), property.FindPropertyRelative("minRange").floatValue, property.FindPropertyRelative("maxRange").floatValue, GetShaderPropertyName(property));
                 DrawHiddenTexture(rect, property);
             }
+
+            return height;
         }
 
         static void DrawHiddenTexture(Rect rect, SerializedProperty prop, int offset = 20)
