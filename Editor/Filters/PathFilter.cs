@@ -38,7 +38,7 @@ namespace Daihenka.AssetPipeline.Filters
 
         public bool IsMatch(string input)
         {
-            if (input == null)
+            if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(pattern))
             {
                 return false;
             }
