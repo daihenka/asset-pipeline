@@ -39,13 +39,18 @@ namespace Daihenka.AssetPipeline.Processors
                 return;
             }
 
+            var importerSo = new SerializedObject(importer);
+            var assetBundleNameProp = importerSo.FindProperty("m_AssetBundleName");
+            var assetBundleVariantProp = importerSo.FindProperty("m_AssetBundleVariant");
+            var assetBundleName = assetBundleNameProp.stringValue;
+            var assetBundleVariant = assetBundleVariantProp.stringValue;
+
             var textureImporter = importer as TextureImporter;
             if (textureImporter != null)
             {
-                var obj = new SerializedObject(importer);
 
-                var widthProp = obj.FindProperty("m_Output.sourceTextureInformation.width");
-                var heightProp = obj.FindProperty("m_Output.sourceTextureInformation.height");
+                var widthProp = importerSo.FindProperty("m_Output.sourceTextureInformation.width");
+                var heightProp = importerSo.FindProperty("m_Output.sourceTextureInformation.height");
 
                 var prevSpriteBorder = textureImporter.spriteBorder;
                 var prevTextureType = textureImporter.textureType;
@@ -56,7 +61,7 @@ namespace Daihenka.AssetPipeline.Processors
 
                 preset.ApplyTo(importer);
 
-                obj.Update();
+                importerSo.Update();
                 widthProp.intValue = prevW;
                 heightProp.intValue = prevH;
 
@@ -71,13 +76,19 @@ namespace Daihenka.AssetPipeline.Processors
                         textureImporter.spritesheet = prevSpritesheet;
                     }
                 }
-
-                obj.ApplyModifiedProperties();
             }
             else
             {
                 preset.ApplyTo(importer);
+                importerSo.Update();
             }
+
+            if (!string.IsNullOrEmpty(assetBundleName))
+            {
+                assetBundleNameProp.stringValue = assetBundleName;
+                assetBundleVariantProp.stringValue = assetBundleVariant;
+            }
+            importerSo.ApplyModifiedProperties();
 
             ImportProfileUserData.AddOrUpdateProcessor(assetPath, this);
             Debug.Log($"[{GetName()}] Preset applied for <b>{assetPath}</b>");
