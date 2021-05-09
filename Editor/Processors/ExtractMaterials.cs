@@ -57,9 +57,9 @@ namespace Daihenka.AssetPipeline.Processors
 
             if (materialPaths.Count > 0)
             {
-                ImportProfileUserData.AddOrUpdateProcessor(assetPath, this);
                 Debug.Log($"[{GetName()}] Materials extracted from <b>{assetPath}</b> to <b>{destinationPath}</b>");
             }
+            ImportProfileUserData.AddOrUpdateProcessor(assetPath, this);
         }
 
         string GetDestinationPath(string assetPath)
