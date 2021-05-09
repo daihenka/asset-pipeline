@@ -158,6 +158,7 @@ namespace Daihenka.AssetPipeline
 
                 EditorUtility.ClearProgressBar();
                 EditorUtility.DisplayDialog("Asset Import Pipeline", $"Finished apply processors to {assetsProcessed} assets", "Okay");
+                m_TreeView.Reload();
                 GUIUtility.ExitGUI();
             }
 
