@@ -78,26 +78,33 @@ namespace Daihenka.AssetPipeline.PropertyDrawers
         static float DrawShaderProperty(Rect rect, SerializedProperty property)
         {
             var height = 0f;
+            
+            EditorGUI.PropertyField(rect, property.FindPropertyRelative("doOverride"), GUIContent.none);
+            var doOverride = property.FindPropertyRelative("doOverride").boolValue;
+            
+            EditorStyles.label.normal.textColor = doOverride ? Color.white : Color.grey;
+            var rectPropertyField = new Rect(rect.x + 18, rect.y, rect.width - 18, rect.height);
+
             if (IsShaderPropertyType(property, ShaderUtil.ShaderPropertyType.TexEnv))
             {
                 var isSet = !string.IsNullOrEmpty(property.FindPropertyRelative("textureNameFilter").FindPropertyRelative("pattern").stringValue);
                 height = EditorGUI.GetPropertyHeight(property.FindPropertyRelative("textureNameFilter"), GetShaderPropertyName(property));
-                EditorGUI.PropertyField(rect, property.FindPropertyRelative("textureNameFilter"), GetShaderPropertyName(property));
+                EditorGUI.PropertyField(rectPropertyField, property.FindPropertyRelative("textureNameFilter"), GetShaderPropertyName(property));
                 EditorGUI.DrawRect(new Rect(rect.x - 14, rect.y, 4, rect.height), AssetPipelineSettings.GetStatusColor(isSet));
                 DrawTexture(rect, AssetImportPipeline.AssetTypeIcons[ImportAssetType.Textures]);
-                DrawHiddenTexture(rect, property, 40);
+                DrawHiddenTexture(rect, property, 22);
             }
             else if (IsShaderPropertyType(property, ShaderUtil.ShaderPropertyType.Color))
             {
                 height = EditorGUI.GetPropertyHeight(property.FindPropertyRelative("colorValue"), GetShaderPropertyName(property));
-                EditorGUI.PropertyField(rect, property.FindPropertyRelative("colorValue"), GetShaderPropertyName(property));
+                EditorGUI.PropertyField(rectPropertyField, property.FindPropertyRelative("colorValue"), GetShaderPropertyName(property));
                 DrawHiddenTexture(rect, property);
             }
             else if (IsShaderPropertyType(property, ShaderUtil.ShaderPropertyType.Vector))
             {
                 height = EditorGUI.GetPropertyHeight(property.FindPropertyRelative("vectorValue"), GetShaderPropertyName(property));
                 var vectorProp = property.FindPropertyRelative("vectorValue");
-                vectorProp.vector4Value = EditorGUI.Vector4Field(rect, GetShaderPropertyName(property), vectorProp.vector4Value);
+                vectorProp.vector4Value = EditorGUI.Vector4Field(rectPropertyField, GetShaderPropertyName(property), vectorProp.vector4Value);
                 DrawHiddenTexture(rect, property);
 
             }
@@ -111,20 +118,20 @@ namespace Daihenka.AssetPipeline.PropertyDrawers
                 {
                     case "_SrcBlend":
                     case "_DstBlend":
-                        floatProp.floatValue = EditorGUI.IntPopup(rect, propLabel, (int) floatProp.floatValue, Enum.GetNames(typeof(BlendMode)).Select(x => new GUIContent(x)).ToArray(), (int[]) Enum.GetValues(typeof(BlendMode)));
+                        floatProp.floatValue = EditorGUI.IntPopup(rectPropertyField, propLabel, (int) floatProp.floatValue, Enum.GetNames(typeof(BlendMode)).Select(x => new GUIContent(x)).ToArray(), (int[]) Enum.GetValues(typeof(BlendMode)));
                         break;
                     case "_AlphaClip":
                     case "_ZWrite":
-                        floatProp.floatValue = EditorGUI.Toggle(rect, propLabel, (int) floatProp.floatValue == 1) ? 1f : 0f;
+                        floatProp.floatValue = EditorGUI.Toggle(rectPropertyField, propLabel, (int) floatProp.floatValue == 1) ? 1f : 0f;
                         break;
                     case "_Surface":
-                        floatProp.floatValue = EditorGUI.IntPopup(rect, propLabel, (int) floatProp.floatValue, Enum.GetNames(typeof(SurfaceType)).Select(x => new GUIContent(x)).ToArray(), (int[]) Enum.GetValues(typeof(SurfaceType)));
+                        floatProp.floatValue = EditorGUI.IntPopup(rectPropertyField, propLabel, (int) floatProp.floatValue, Enum.GetNames(typeof(SurfaceType)).Select(x => new GUIContent(x)).ToArray(), (int[]) Enum.GetValues(typeof(SurfaceType)));
                         break;
                     case "_Cull":
-                        floatProp.floatValue = EditorGUI.IntPopup(rect, propLabel, (int) floatProp.floatValue, Enum.GetNames(typeof(CullMode)).Select(x => new GUIContent(x)).ToArray(), (int[]) Enum.GetValues(typeof(CullMode)));
+                        floatProp.floatValue = EditorGUI.IntPopup(rectPropertyField, propLabel, (int) floatProp.floatValue, Enum.GetNames(typeof(CullMode)).Select(x => new GUIContent(x)).ToArray(), (int[]) Enum.GetValues(typeof(CullMode)));
                         break;
                     default:
-                        EditorGUI.PropertyField(rect, floatProp, propLabel);
+                        EditorGUI.PropertyField(rectPropertyField, floatProp, propLabel);
                         break;
                 }
 
@@ -133,20 +140,21 @@ namespace Daihenka.AssetPipeline.PropertyDrawers
             else if (IsShaderPropertyType(property, ShaderUtil.ShaderPropertyType.Range))
             {
                 height = EditorGUI.GetPropertyHeight(property.FindPropertyRelative("floatValue"), GetShaderPropertyName(property));
-                EditorGUI.Slider(rect, property.FindPropertyRelative("floatValue"), property.FindPropertyRelative("minRange").floatValue, property.FindPropertyRelative("maxRange").floatValue, GetShaderPropertyName(property));
+                EditorGUI.Slider(rectPropertyField, property.FindPropertyRelative("floatValue"), property.FindPropertyRelative("minRange").floatValue, property.FindPropertyRelative("maxRange").floatValue, GetShaderPropertyName(property));
                 DrawHiddenTexture(rect, property);
             }
-
+            
+            EditorStyles.label.normal.textColor = Color.white;
             return height;
         }
 
-        static void DrawHiddenTexture(Rect rect, SerializedProperty prop, int offset = 20)
+        static void DrawHiddenTexture(Rect rect, SerializedProperty prop, int offset = 2)
         {
             if (prop.FindPropertyRelative("isHidden").boolValue)
                 DrawTexture(rect, s_HiddenIcon, offset);
         }
 
-        static void DrawTexture(Rect rect, Texture assetTypeIcon, float offset = 20)
+        static void DrawTexture(Rect rect, Texture assetTypeIcon, float offset = 2)
         {
             GUI.DrawTexture(new Rect(rect.x + EditorGUIUtility.labelWidth + 2f - offset, rect.y + (rect.height - 16) * 0.5f, 16, 16), assetTypeIcon);
         }

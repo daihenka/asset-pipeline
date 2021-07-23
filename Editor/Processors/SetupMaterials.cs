@@ -60,6 +60,9 @@ namespace Daihenka.AssetPipeline.Processors
                             var texturePropertyNames = material.GetTexturePropertyNames().ToList();
                             foreach (var map in matSetup.propertyMappings)
                             {
+                                if (!map.doOverride) {
+                                    continue;
+                                }
                                 switch (map.materialPropertyType)
                                 {
                                     case ShaderUtil.ShaderPropertyType.TexEnv:
@@ -192,6 +195,7 @@ namespace Daihenka.AssetPipeline.Processors
             public float minRange = 0;
             public float maxRange = 1;
             public bool isHidden;
+            public bool doOverride = true;
 
             public MaterialTextureMap(string name, string description, PathFilter textureFilter, bool isHidden)
             {
