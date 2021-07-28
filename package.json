@@ -2,7 +2,7 @@
   "name": "com.daihenka.assetpipeline",
   "displayName": "Asset Pipeline",
   "description": "A rule-based modular approach to AssetPostProcessors",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "unity": "2019.3",
   "repository": {
     "type": "git",
