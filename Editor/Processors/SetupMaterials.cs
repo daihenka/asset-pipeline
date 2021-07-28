@@ -195,7 +195,7 @@ namespace Daihenka.AssetPipeline.Processors
             public float minRange = 0;
             public float maxRange = 1;
             public bool isHidden;
-            public bool doOverride = true;
+            public bool overridden = true;
 
             public MaterialTextureMap(string name, string description, PathFilter textureFilter, bool isHidden)
             {
