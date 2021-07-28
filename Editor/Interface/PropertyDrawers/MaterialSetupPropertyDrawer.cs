@@ -144,7 +144,7 @@ namespace Daihenka.AssetPipeline.PropertyDrawers
                 DrawHiddenTexture(rect, property);
             }
             
-            EditorStyles.label.normal.textColor = Color.white;
+            GUI.enabled = true;
             return height;
         }
 
