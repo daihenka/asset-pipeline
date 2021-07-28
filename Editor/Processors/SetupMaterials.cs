@@ -60,7 +60,7 @@ namespace Daihenka.AssetPipeline.Processors
                             var texturePropertyNames = material.GetTexturePropertyNames().ToList();
                             foreach (var map in matSetup.propertyMappings)
                             {
-                                if (!map.doOverride) {
+                                if (!map.overridden) {
                                     continue;
                                 }
                                 switch (map.materialPropertyType)
