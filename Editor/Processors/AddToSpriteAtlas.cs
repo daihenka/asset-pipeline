@@ -77,7 +77,7 @@ namespace Daihenka.AssetPipeline.Processors
         static SpriteAtlas GetExistingMasterSpriteAtlas(string assetFolder)
         {
             var spriteAtlases = AssetDatabaseUtility.FindAndLoadAssets<SpriteAtlas>("t:SpriteAtlas", assetFolder);
-            return spriteAtlases.FirstOrDefault(atlas => !atlas.isVariant);
+            return spriteAtlases.FirstOrDefault(atlas => atlas && !atlas.isVariant);
         }
 
         SpriteAtlas CreateMasterSpriteAtlas(string assetFolder, string atlasName)
