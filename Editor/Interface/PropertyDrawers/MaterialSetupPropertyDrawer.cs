@@ -79,10 +79,8 @@ namespace Daihenka.AssetPipeline.PropertyDrawers
         {
             var height = 0f;
             
-            EditorGUI.PropertyField(rect, property.FindPropertyRelative("doOverride"), GUIContent.none);
-            var doOverride = property.FindPropertyRelative("doOverride").boolValue;
-            
-            EditorStyles.label.normal.textColor = doOverride ? Color.white : Color.grey;
+            EditorGUI.PropertyField(rect, property.FindPropertyRelative("overridden"), GUIContent.none);
+            GUI.enabled = property.FindPropertyRelative("overridden").boolValue;
             var rectPropertyField = new Rect(rect.x + 18, rect.y, rect.width - 18, rect.height);
 
             if (IsShaderPropertyType(property, ShaderUtil.ShaderPropertyType.TexEnv))
