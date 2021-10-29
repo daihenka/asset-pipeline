@@ -108,7 +108,7 @@ namespace Daihenka.AssetPipeline.Processors
 
         void ApplyPresetToSpriteAtlas(Object asset, string assetPath)
         {
-            if (asset.GetType() != typeof(SpriteAtlas) || preset == null || !preset.CanBeAppliedTo(asset) || !ShouldImport(assetPath))
+            if (!asset || asset.GetType() != typeof(SpriteAtlas) || preset == null || !preset.CanBeAppliedTo(asset) || !ShouldImport(assetPath))
             {
                 return;
             }
