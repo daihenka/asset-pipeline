@@ -108,6 +108,16 @@ namespace Daihenka.AssetPipeline
             }
         }
 
+        protected override void GenerateTreeElements(TreeViewItem root)
+        {
+            if (!m_Profile)
+            {
+                root.AddChild(new TreeViewItem(0, 0, "Please reopen this window."));
+                return;
+            }
+            base.GenerateTreeElements(root);
+        }
+
         protected override IList<string> GetFilteredPaths()
         {
             var cachedAssetPaths = AssetImportPipeline.CachedAssetPaths;

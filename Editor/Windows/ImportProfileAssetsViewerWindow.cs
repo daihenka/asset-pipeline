@@ -52,6 +52,12 @@ namespace Daihenka.AssetPipeline
                 return;
             }
 
+            if (!m_Target)
+            {
+                EditorUtility.DisplayDialog("Asset Pipeline", "Something went wrong with the Import Profile Assets Viewer window.  Please try opening it again from the Import Profile inspector.", "Okay");
+                Close();
+            }
+
             if (m_TreeViewState == null)
             {
                 m_TreeViewState = new TreeViewState();
